@@ -2,6 +2,37 @@ import { useState, useEffect } from 'react'
 
 const WHATSAPP_NUMBER = '6285219588144'
 
+// Simple markdown renderer for bold text (**text**)
+function renderMarkdown(text) {
+  if (!text) return ''
+  // Split by **text** patterns, handling multiple occurrences
+  // Use non-greedy match to handle multiple bold sections: \*\*[^*]+\*\*
+  const parts = text.split(/(\*\*[^*]+\*\*)/g)
+  const result = []
+  
+  parts.forEach((part, i) => {
+    if (!part) return
+    
+    // Check if this part is a bold marker
+    if (part.startsWith('**') && part.endsWith('**') && part.length > 4) {
+      result.push(<strong key={`bold-${i}`}>{part.slice(2, -2)}</strong>)
+    } else {
+      // Regular text - preserve newlines
+      const lines = part.split('\n')
+      lines.forEach((line, lineIdx) => {
+        if (lineIdx > 0) {
+          result.push(<br key={`br-${i}-${lineIdx}`} />)
+        }
+        if (line) {
+          result.push(<span key={`text-${i}-${lineIdx}`}>{line}</span>)
+        }
+      })
+    }
+  })
+  
+  return result.length > 0 ? <>{result}</> : text
+}
+
 function HeroLogo() {
   return (
     <svg className="w-[200px] mb-12 drop-shadow-[0_10px_30px_rgba(0,117,212,0.4)] hero-fade-down" viewBox="0 0 200 80" xmlns="http://www.w3.org/2000/svg">
@@ -550,14 +581,14 @@ export default function App() {
             {chatMessages.map((m, i) => (
               <div key={i} className={`flex ${m.role === 'user' ? 'justify-end' : 'justify-start'}`}>
                 <div className={`max-w-[85%] rounded-xl px-3 py-2 text-sm ${m.role === 'user' ? 'bg-[#0075d4] text-white' : 'bg-gray-100 text-gray-800'}`}>
-                  {m.content}
+                  {m.role === 'user' ? m.content : renderMarkdown(m.content)}
                 </div>
               </div>
             ))}
             {chatLoading && streamingContent && (
               <div className="flex justify-start">
-                <div className="max-w-[85%] rounded-xl px-3 py-2 text-sm bg-gray-100 text-gray-800 whitespace-pre-wrap">
-                  {streamingContent}
+                <div className="max-w-[85%] rounded-xl px-3 py-2 text-sm bg-gray-100 text-gray-800">
+                  {renderMarkdown(streamingContent)}
                 </div>
               </div>
             )}
