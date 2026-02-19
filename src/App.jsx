@@ -129,6 +129,7 @@ export default function App() {
   const [chatLoading, setChatLoading] = useState(false)
   const [streamingContent, setStreamingContent] = useState('')
   const [navOpen, setNavOpen] = useState(false)
+  const [dropdownOpen, setDropdownOpen] = useState(false)
 
   function openWaModal() {
     setWaPopup({ name: '', email: '', message: '' })
@@ -249,14 +250,20 @@ export default function App() {
     return () => document.removeEventListener('click', handleClick)
   }, [])
 
-  const navLinks = [
-    { id: 'about', label: 'Tentang' },
+  useEffect(() => {
+    if (!dropdownOpen) return
+    const close = (e) => {
+      if (e.target.closest('[data-nav-dropdown]') === null) setDropdownOpen(false)
+    }
+    document.addEventListener('click', close)
+    return () => document.removeEventListener('click', close)
+  }, [dropdownOpen])
+
+  const navDropdownItems = [
     { id: 'services', label: 'Layanan' },
     { id: 'call-center', label: 'Call Center' },
     { id: 'case-studies', label: 'Studi Kasus' },
     { id: 'clients', label: 'Klien' },
-    { id: 'why-us', label: 'Mengapa Kami' },
-    { id: 'contact', label: 'Kontak' },
   ]
 
   function scrollToSection(id) {
@@ -272,11 +279,30 @@ export default function App() {
           <div className="flex items-center justify-between h-14 sm:h-16">
             <a href="#" onClick={(e) => { e.preventDefault(); window.scrollTo({ top: 0, behavior: 'smooth' }) }} className="text-white font-bold text-lg sm:text-xl">Skytech Indonesia</a>
             <div className="hidden md:flex items-center gap-1">
-              {navLinks.map((link) => (
-                <button key={link.id} type="button" onClick={() => scrollToSection(link.id)} className="px-3 py-2 text-sm text-white/90 hover:text-[#00bcd4] hover:bg-white/5 rounded-lg transition-colors">
-                  {link.label}
+              <button type="button" onClick={() => scrollToSection('about')} className="px-3 py-2 text-sm text-white/90 hover:text-[#00bcd4] hover:bg-white/5 rounded-lg transition-colors">
+                Tentang
+              </button>
+              <div className="relative" data-nav-dropdown>
+                <button type="button" onClick={() => setDropdownOpen((o) => !o)} className="px-3 py-2 text-sm text-white/90 hover:text-[#00bcd4] hover:bg-white/5 rounded-lg transition-colors inline-flex items-center gap-1" aria-expanded={dropdownOpen} aria-haspopup="true">
+                  Layanan
+                  <svg className={`w-4 h-4 transition-transform ${dropdownOpen ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg>
                 </button>
-              ))}
+                {dropdownOpen && (
+                  <div className="absolute left-0 top-full mt-1 py-2 w-48 bg-[#002447] border border-white/10 rounded-lg shadow-xl z-50">
+                    {navDropdownItems.map((link) => (
+                      <button key={link.id} type="button" onClick={() => { scrollToSection(link.id); setDropdownOpen(false) }} className="block w-full text-left px-4 py-2 text-sm text-white/90 hover:bg-white/10 hover:text-[#00bcd4]">
+                        {link.label}
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
+              <button type="button" onClick={() => scrollToSection('why-us')} className="px-3 py-2 text-sm text-white/90 hover:text-[#00bcd4] hover:bg-white/5 rounded-lg transition-colors">
+                Mengapa Kami
+              </button>
+              <button type="button" onClick={() => scrollToSection('contact')} className="px-3 py-2 text-sm text-white/90 hover:text-[#00bcd4] hover:bg-white/5 rounded-lg transition-colors">
+                Kontak
+              </button>
             </div>
             <div className="md:hidden relative">
               <button type="button" onClick={() => setNavOpen((o) => !o)} className="p-2 text-white rounded-lg hover:bg-white/10" aria-label="Menu">
@@ -284,11 +310,17 @@ export default function App() {
               </button>
               {navOpen && (
                 <div className="absolute right-0 top-full mt-1 py-2 w-48 bg-[#002447] border border-white/10 rounded-lg shadow-xl">
-                  {navLinks.map((link) => (
-                    <button key={link.id} type="button" onClick={() => { scrollToSection(link.id); setNavOpen(false) }} className="block w-full text-left px-4 py-2 text-sm text-white/90 hover:bg-white/10 hover:text-[#00bcd4]">
+                  <button type="button" onClick={() => { scrollToSection('about'); setNavOpen(false) }} className="block w-full text-left px-4 py-2 text-sm text-white/90 hover:bg-white/10 hover:text-[#00bcd4]">Tentang</button>
+                  <div className="border-t border-white/10 my-1" />
+                  <div className="px-4 py-1 text-xs text-white/60 uppercase tracking-wider">Layanan</div>
+                  {navDropdownItems.map((link) => (
+                    <button key={link.id} type="button" onClick={() => { scrollToSection(link.id); setNavOpen(false) }} className="block w-full text-left px-4 py-2 text-sm text-white/90 hover:bg-white/10 hover:text-[#00bcd4] pl-6">
                       {link.label}
                     </button>
                   ))}
+                  <div className="border-t border-white/10 my-1" />
+                  <button type="button" onClick={() => { scrollToSection('why-us'); setNavOpen(false) }} className="block w-full text-left px-4 py-2 text-sm text-white/90 hover:bg-white/10 hover:text-[#00bcd4]">Mengapa Kami</button>
+                  <button type="button" onClick={() => { scrollToSection('contact'); setNavOpen(false) }} className="block w-full text-left px-4 py-2 text-sm text-white/90 hover:bg-white/10 hover:text-[#00bcd4]">Kontak</button>
                 </div>
               )}
             </div>
