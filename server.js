@@ -52,7 +52,7 @@ app.post('/api/chat', async (req, res) => {
     ]
     const stream = await openrouter.chat.send({
       chatGenerationParams: {
-        model: 'openrouter/aurora-alpha',
+        model: 'arcee-ai/trinity-large-preview:free',
         messages: fullMessages,
         stream: true
       }
@@ -65,6 +65,9 @@ app.post('/api/chat', async (req, res) => {
         fullResponse += content
         res.write(`data: ${JSON.stringify({ content })}\n\n`)
         if (typeof res.flush === 'function') res.flush()
+      }
+      if (chunk?.usage?.reasoningTokens != null) {
+        res.write(`data: ${JSON.stringify({ reasoningTokens: chunk.usage.reasoningTokens })}\n\n`)
       }
     }
     res.write(`data: ${JSON.stringify({ done: true, fullResponse })}\n\n`)

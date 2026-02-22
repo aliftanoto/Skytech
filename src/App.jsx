@@ -1,6 +1,48 @@
 import { useState, useEffect } from 'react'
+import logoImage from './assets/LOGO_SKYTECH.png'
 
 const WHATSAPP_NUMBER = '6285219588144'
+
+// Load all logo assets from LOGO folder for "Dipercaya oleh Brand Terkemuka"
+const logoPng = import.meta.glob('./assets/LOGO/*.png', { eager: true, query: '?url',import: 'default' })
+const logoSvg = import.meta.glob('./assets/LOGO/*.svg', { eager: true, query: '?url',import: 'default' })
+const logoFiles = { ...logoPng, ...logoSvg }
+
+const LOGO_DISPLAY_NAMES = {
+  'indosat': 'Indosat',
+  'samsung': 'Samsung',
+  'nissan': 'Nissan',
+  'singapore-airlines': 'Singapore Airlines',
+  'sc-johnson': 'SC Johnson',
+  'canva': 'Canva',
+  'hp': 'HP',
+  'allianz': 'Allianz',
+  'mcdonalds': "McDonald's",
+  'niaga': 'CIMB Niaga',
+  'cimb-niaga': 'CIMB Niaga',
+  'telkomsel': 'Telkomsel',
+  'nivea': 'Nivea',
+  'zurich': 'Zurich',
+  'electrolux': 'Electrolux',
+  'lg': 'LG',
+  'coca-cola': 'Coca-Cola',
+  'mg': 'MG',
+  'ikea': 'IKEA',
+  'warner-bros': 'Warner Bros',
+  'sprite': 'Sprite',
+  'hsbc': 'HSBC',
+  'gudang-garam': 'Gudang Garam',
+  'Gudang-Garam': 'Gudang Garam',
+  'guardian': 'Guardian',
+  'enervon': 'Enervon',
+  'kiwi': 'Kiwi',
+}
+
+const CLIENT_LOGOS = Object.entries(logoFiles).map(([path, url]) => {
+  const filename = path.replace(/^.*\/([^/]+)$/, '$1').replace(/\.[^.]+$/, '')
+  const name = LOGO_DISPLAY_NAMES[filename] || LOGO_DISPLAY_NAMES[filename.toLowerCase()] || filename.replace(/-/g, ' ')
+  return { name, logo: url }
+}).sort((a, b) => a.name.localeCompare(b.name))
 
 // Simple markdown renderer for bold text (**text**)
 function renderMarkdown(text) {
@@ -35,25 +77,13 @@ function renderMarkdown(text) {
 
 function HeroLogo() {
   return (
-    <svg className="w-[200px] mb-12 drop-shadow-[0_10px_30px_rgba(0,117,212,0.4)] hero-fade-down" viewBox="0 0 200 80" xmlns="http://www.w3.org/2000/svg">
-      <path d="M50,20 Q40,15 35,25 L30,35 Q45,30 50,40 Q55,30 70,35 L65,25 Q60,15 50,20 Z" fill="#00bcd4"/>
-      <path d="M35,25 Q30,35 35,45 L40,50 Q42,40 40,35 Z" fill="#0075d4"/>
-      <path d="M65,25 Q70,35 65,45 L60,50 Q58,40 60,35 Z" fill="#0075d4"/>
-      <text x="85" y="40" fontFamily="Outfit, sans-serif" fontSize="28" fontWeight="800" fill="#ffffff">Skytech</text>
-      <text x="85" y="60" fontFamily="Outfit, sans-serif" fontSize="14" fontWeight="400" fill="#00bcd4" letterSpacing="3">INDONESIA</text>
-    </svg>
+    <img src={logoImage} alt="Skytech Indonesia" className="h-32 sm:h-24 md:h-28 mb-12 drop-shadow-[0_10px_30px_rgba(0,117,212,0.4)] hero-fade-down w-auto object-contain" />
   )
 }
 
 function FooterLogo() {
   return (
-    <svg className="w-[150px] mx-auto my-8 opacity-70" viewBox="0 0 200 80" xmlns="http://www.w3.org/2000/svg">
-      <path d="M50,20 Q40,15 35,25 L30,35 Q45,30 50,40 Q55,30 70,35 L65,25 Q60,15 50,20 Z" fill="#00bcd4" opacity="0.7"/>
-      <path d="M35,25 Q30,35 35,45 L40,50 Q42,40 40,35 Z" fill="#0075d4" opacity="0.7"/>
-      <path d="M65,25 Q70,35 65,45 L60,50 Q58,40 60,35 Z" fill="#0075d4" opacity="0.7"/>
-      <text x="85" y="40" fontFamily="Outfit, sans-serif" fontSize="28" fontWeight="800" fill="rgba(255,255,255,0.7)">Skytech</text>
-      <text x="85" y="60" fontFamily="Outfit, sans-serif" fontSize="14" fontWeight="400" fill="rgba(0,188,212,0.7)" letterSpacing="3">INDONESIA</text>
-    </svg>
+    <img src={logoImage} alt="Skytech Indonesia" className="h-32 sm:h-32 mx-auto my-8 opacity-80 w-auto object-contain" />
   )
 }
 
@@ -104,8 +134,6 @@ const CASE_STUDIES = [
     { label: 'Completion Rate', value: '87.48%' },
   ]},
 ]
-
-const CLIENT_NAMES = ['Indosat', 'Samsung', 'Nissan', 'Singapore Airlines', 'SC Johnson', 'Canva', 'HP', 'Allianz', "McDonald's", 'CIMB Niaga', 'Guardian', 'Telkomsel', 'Nivea', 'Zurich', 'Electrolux', 'Indomaret', 'Enervon', 'LG', 'Coca-Cola', 'MG', 'Kiwi', 'IKEA', 'Warner Bros', 'Sprite', 'HSBC']
 
 const CALL_CENTER_FEATURES = [
   'Integrasi yang Mulus',
@@ -277,7 +305,9 @@ export default function App() {
       <nav className="fixed top-0 left-0 right-0 z-50 bg-[#002447]/95 backdrop-blur-sm border-b border-white/10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
           <div className="flex items-center justify-between h-14 sm:h-16">
-            <a href="#" onClick={(e) => { e.preventDefault(); window.scrollTo({ top: 0, behavior: 'smooth' }) }} className="text-white font-bold text-lg sm:text-xl">Skytech Indonesia</a>
+            <a href="#" onClick={(e) => { e.preventDefault(); window.scrollTo({ top: 0, behavior: 'smooth' }) }} className="flex items-center shrink-0">
+              <img src={logoImage} alt="Skytech Indonesia" className="h-24 sm:h-24 w-auto object-contain" />
+            </a>
             <div className="hidden md:flex items-center gap-1">
               <button type="button" onClick={() => scrollToSection('about')} className="px-3 py-2 text-sm text-white/90 hover:text-[#00bcd4] hover:bg-white/5 rounded-lg transition-colors">
                 Tentang
@@ -285,7 +315,7 @@ export default function App() {
               <div className="relative" data-nav-dropdown>
                 <button type="button" onClick={() => setDropdownOpen((o) => !o)} className="px-3 py-2 text-sm text-white/90 hover:text-[#00bcd4] hover:bg-white/5 rounded-lg transition-colors inline-flex items-center gap-1" aria-expanded={dropdownOpen} aria-haspopup="true">
                   Layanan
-                  <svg className={`w-4 h-4 transition-transform ${dropdownOpen ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg>
+                  <png className={`w-4 h-4 transition-transform ${dropdownOpen ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></png>
                 </button>
                 {dropdownOpen && (
                   <div className="absolute left-0 top-full mt-1 py-2 w-48 bg-[#002447] border border-white/10 rounded-lg shadow-xl z-50">
@@ -306,7 +336,7 @@ export default function App() {
             </div>
             <div className="md:hidden relative">
               <button type="button" onClick={() => setNavOpen((o) => !o)} className="p-2 text-white rounded-lg hover:bg-white/10" aria-label="Menu">
-                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">{navOpen ? <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /> : <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />}</svg>
+                <png className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">{navOpen ? <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /> : <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />}</png>
               </button>
               {navOpen && (
                 <div className="absolute right-0 top-full mt-1 py-2 w-48 bg-[#002447] border border-white/10 rounded-lg shadow-xl">
@@ -482,9 +512,9 @@ export default function App() {
           <h2 className="section-title text-[#003d6b] text-3xl sm:text-4xl font-extrabold text-center mb-4">Dipercaya oleh Brand Terkemuka</h2>
           <p className="text-center text-[#555] text-lg mb-12">Lebih dari 25 merek telah memilih Skytech Indonesia sebagai mitra pertumbuhan mereka</p>
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-8 justify-items-center items-center">
-            {CLIENT_NAMES.map((name) => (
-              <div key={name} className="text-2xl font-bold text-[#003d6b] opacity-60 hover:opacity-100 hover:scale-110 transition-all duration-300 py-4">
-                {name}
+            {CLIENT_LOGOS.map(({ name, logo }) => (
+              <div key={name} className="flex items-center justify-center py-4 px-4 h-24 sm:h-28 opacity-70 hover:opacity-100 hover:scale-110 transition-all duration-300">
+                <img src={logo} alt={name} className="max-h-16 sm:max-h-20 max-w-[140px] w-auto object-contain" />
               </div>
             ))}
           </div>
@@ -513,7 +543,7 @@ export default function App() {
 
       {/* Contact */}
       <section id="contact" className="contact fade-in py-16 sm:py-24 bg-gradient-to-br from-[#002247] to-[#003d6b] text-white relative overflow-hidden">
-        <div className="absolute inset-0 opacity-30 bg-[length:100px_100px] bg-[url('data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22%3E%3Cpath d=%22M0,0 L50,50 L0,100 Z%22 fill=%22rgba(255,255,255,0.05)%22/%3E%3C/svg%3E')]" />
+        <div className="absolute inset-0 opacity-30 bg-[length:100px_100px] bg-[url('data:image/png+xml,%3Csvg xmlns=%22http://www.w3.org/2000/png%22 viewBox=%220 0 100 100%22%3E%3Cpath d=%22M0,0 L50,50 L0,100 Z%22 fill=%22rgba(255,255,255,0.05)%22/%3E%3C/png%3E')]" />
         <div className="max-w-[900px] mx-auto px-6 text-center relative z-10">
           <h2 className="section-title section-title-white text-white text-3xl sm:text-4xl font-extrabold mb-6">Mari Berkolaborasi</h2>
           <p className="text-xl mb-10">Siap untuk mentransformasi strategi pemasaran Anda? Hubungi kami.</p>
@@ -561,7 +591,7 @@ export default function App() {
               <div className="flex items-center justify-between mb-6">
                 <h3 className="text-xl font-bold text-[#003d6b]">Kirim pesan via WhatsApp</h3>
                 <button type="button" onClick={closeWaModal} className="p-2 rounded-full hover:bg-gray-100 text-gray-500 hover:text-gray-700 transition-colors" aria-label="Tutup">
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
+                  <png className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></png>
                 </button>
               </div>
               <form onSubmit={sendWhatsAppFromPopup} className="space-y-5">
@@ -596,19 +626,26 @@ export default function App() {
 
       {/* Floating AI Chatbot button */}
       <button type="button" onClick={() => setChatOpen((o) => !o)} className="fixed w-14 h-14 bottom-8 right-8 bg-[#003d6b] text-white rounded-full flex items-center justify-center shadow-lg hover:scale-110 hover:shadow-xl transition-all z-[1000] border-2 border-[#00bcd4]" aria-label="Open AI assistant">
-        <svg className="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>
+        <svg className="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden>
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+        </svg>
       </button>
 
       {/* Chatbot panel */}
       {chatOpen && (
         <div className="fixed bottom-24 right-8 z-[1001] w-[380px] max-w-[calc(100vw-2rem)] max-h-[520px] flex flex-col rounded-2xl shadow-2xl bg-white border-2 border-[#003d6b]/20 overflow-hidden">
           <div className="flex items-center justify-between px-4 py-3 bg-[#003d6b] text-white">
-            <span className="font-bold">Skytech AI Assistant</span>
+            <div className="flex items-center gap-2">
+              <span className="flex items-center justify-center w-8 h-8 rounded-lg bg-white/20 shrink-0">
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" /></svg>
+              </span>
+              <span className="font-bold">Skytech AI Assistant</span>
+            </div>
             <button type="button" onClick={() => setChatOpen(false)} className="p-1 rounded hover:bg-white/20" aria-label="Close">×</button>
           </div>
           <div className="flex-1 overflow-y-auto p-4 space-y-3 min-h-[200px]">
             {chatMessages.length === 0 && !chatLoading && (
-              <p className="text-gray-500 text-sm">Tanya apa saja tentang Skytech Indonesia atau website ini.</p>
+              <p className="text-gray-500 text-sm">Tanya apa saja tentang layanan kami.</p>
             )}
             {chatMessages.map((m, i) => (
               <div key={i} className={`flex ${m.role === 'user' ? 'justify-end' : 'justify-start'}`}>
