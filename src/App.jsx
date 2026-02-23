@@ -313,8 +313,8 @@ export default function App() {
                 Tentang
               </button>
               <div className="relative" data-nav-dropdown>
-                <button type="button" onClick={() => setDropdownOpen((o) => !o)} className="px-3 py-2 text-sm font-medium text-white hover:text-[#00bcd4] hover:bg-white/10 rounded-lg transition-colors inline-flex items-center gap-2 border border-white/20 hover:border-white/40" aria-expanded={dropdownOpen} aria-haspopup="true">
-                  <span>Layanan</span>
+                <button type="button" onClick={() => setDropdownOpen((o) => !o)} className="px-3 py-2 text-sm text-white/90 hover:text-[#00bcd4] hover:bg-white/5 rounded-lg transition-colors inline-flex items-center gap-1" aria-expanded={dropdownOpen} aria-haspopup="true">
+                  Layanan
                   <svg className={`w-4 h-4 shrink-0 transition-transform ${dropdownOpen ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg>
                 </button>
                 {dropdownOpen && (
