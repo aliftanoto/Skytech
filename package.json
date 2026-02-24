@@ -3,17 +3,12 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
-  
-  "homepage": "https://aliftanoto.github.io/Skytech/",
   "scripts": {
     "dev": "node server.js",
     "build": "vite build",
     "start": "cross-env NODE_ENV=production node server.js",
     "lint": "eslint .",
-    "preview": "vite preview",
-
-    "predeploy": "npm run build",
-    "deploy": "gh-pages -d dist"
+    "preview": "vite preview"
   },
   "dependencies": {
     "@openrouter/sdk": "^0.8.0",
