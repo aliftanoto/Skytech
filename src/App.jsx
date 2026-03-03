@@ -152,7 +152,9 @@ export default function App() {
   const [showWaModal, setShowWaModal] = useState(false)
   const [waPopup, setWaPopup] = useState({ name: '', email: '', message: '' })
   const [chatOpen, setChatOpen] = useState(false)
-  const [chatMessages, setChatMessages] = useState([])
+  const [chatMessages, setChatMessages] = useState([
+    { role: 'assistant', content: 'Halo, saya adalah AI assistant dari Skytech. Saya siap membantu Anda.' }
+  ])
   const [chatInput, setChatInput] = useState('')
   const [chatLoading, setChatLoading] = useState(false)
   const [streamingContent, setStreamingContent] = useState('')
@@ -290,6 +292,7 @@ export default function App() {
   const navDropdownItems = [
     { id: 'services', label: 'Layanan' },
     { id: 'call-center', label: 'Call Center' },
+    { id: 'it-outsourcing', label: 'IT Outsourcing' },
     { id: 'case-studies', label: 'Studi Kasus' },
     { id: 'clients', label: 'Klien' },
   ]
@@ -481,6 +484,49 @@ export default function App() {
         </div>
       </section>
 
+      {/* IT Outsourcing */}
+      <section id="it-outsourcing" className="it-outsourcing fade-in py-16 sm:py-24 bg-gradient-to-b from-[#f0f4f8] to-[#e3eef7]">
+        <div className="max-w-[1200px] mx-auto px-6 sm:px-8">
+          <h2 className="section-title text-[#003d6b] text-3xl sm:text-4xl font-extrabold mb-4">IT Outsourcing Services</h2>
+          <p className="text-[#555] text-lg max-w-3xl mb-12">
+            Skytech menyediakan layanan outsourcing SDM IT untuk kebutuhan operasional maupun project development perusahaan.
+          </p>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 mt-8">
+            <div className="bg-white rounded-[20px] shadow-[0_10px_40px_rgba(0,0,0,0.08)] p-8 border-t-4 border-t-[#0075d4]">
+              <h3 className="text-[#003d6b] text-xl font-bold mb-6 flex items-center gap-2">
+                <span className="text-2xl">📋</span> Layanan Kami
+              </h3>
+              <ul className="space-y-3">
+                {['Application Support (L1 & L2)', '.NET Developer (Junior & Senior)', 'Helpdesk & Technical Support', 'Project-Based IT Resource'].map((item) => (
+                  <li key={item} className="flex items-start gap-2 text-[#555] text-[1.05rem]">
+                    <span className="text-[#00bcd4] font-bold mt-0.5">•</span>
+                    <span>{item}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <div className="bg-white rounded-[20px] shadow-[0_10px_40px_rgba(0,0,0,0.08)] p-8 border-t-4 border-t-[#00bcd4]">
+              <h3 className="text-[#003d6b] text-xl font-bold mb-6 flex items-center gap-2">
+                <span className="text-2xl">⭐</span> Keunggulan
+              </h3>
+              <ul className="space-y-3">
+                {['Penempatan onsite maupun hybrid', 'Kontrak jangka pendek & panjang', 'Proses seleksi dan screening terstruktur', 'Replacement policy jika diperlukan', 'Skema biaya transparan (monthly all-in)'].map((item) => (
+                  <li key={item} className="flex items-start gap-2 text-[#555] text-[1.05rem]">
+                    <span className="text-[#ff6b35] font-bold mt-0.5">✓</span>
+                    <span>{item}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+          <div className="mt-12 p-6 sm:p-8 bg-gradient-to-br from-[#002447] to-[#003d6b] rounded-[20px] text-white">
+            <p className="text-lg leading-relaxed text-white/95 text-center max-w-2xl mx-auto">
+              Kami membantu perusahaan memastikan sistem berjalan stabil sekaligus mendukung pengembangan teknologi secara berkelanjutan.
+            </p>
+          </div>
+        </div>
+      </section>
+
       {/* Case Studies */}
       <section id="case-studies" className="case-studies fade-in py-16 sm:py-24 bg-white">
         <div className="max-w-[1200px] mx-auto px-6 sm:px-8">
@@ -642,7 +688,7 @@ export default function App() {
             <button type="button" onClick={() => setChatOpen(false)} className="p-1 rounded hover:bg-white/20" aria-label="Close">×</button>
           </div>
           <div className="flex-1 overflow-y-auto p-4 space-y-3 min-h-[200px]">
-            {chatMessages.length === 0 && !chatLoading && (
+            {!chatLoading && chatMessages.length === 1 && chatMessages[0].role === 'assistant' && (
               <p className="text-gray-500 text-sm">Tanya apa saja tentang layanan kami.</p>
             )}
             {chatMessages.map((m, i) => (
