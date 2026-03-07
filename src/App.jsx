@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import logoImage from './assets/LOGO_SKYTECH.png'
 
-const WHATSAPP_NUMBER = '6285219588144'
+const WHATSAPP_NUMBER = '6285883144435'
 
 // Load all logo assets from LOGO folder for "Dipercaya oleh Brand Terkemuka"
 const logoPng = import.meta.glob('./assets/LOGO/*.png', { eager: true, query: '?url',import: 'default' })
